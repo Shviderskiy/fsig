@@ -18,7 +18,7 @@ struct FileReader : public IReader
     FileReader & operator = (FileReader const &) = delete;
 
     virtual size_t read(uint64_t offset_,
-                        const boost::asio::mutable_buffer & buffer_) override;
+                        boost::asio::mutable_buffer const & buffer_) override;
     virtual void close() override;
 
 private:
@@ -26,6 +26,7 @@ private:
     std::string _file_path;
     std::mutex _mutex;
     std::ifstream _file;
+    uint64_t _file_size;
 };
 
 } // namespace fsig
