@@ -111,7 +111,7 @@ CommandLineArgs parse_command_line(int argc_, char const * const argv_[])
         FSIG_DEFAULT_BLOCK_SIZE,
         FSIG_DEFAULT_IO_BLOCK_SIZE,
         std::thread::hardware_concurrency(),
-        "MD5"
+        FSIG_DEFAULT_HASH_ALGO
     };
 
     bpo::options_description description("options");

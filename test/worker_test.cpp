@@ -5,7 +5,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <botan/md5.h>
+#include <botan/hash.h>
 
 #include "io_interfaces.hpp"
 #include "worker.hpp"
@@ -23,8 +23,8 @@ struct Fixture
         , reader(new fsig_test::MemoryReader(digits.data(), digits.size()))
         , writer(new fsig_test::MemoryWriter)
         , result(writer->content)
-        , hash(new Botan::MD5)
-        , md5_zero_space(hash->output_length(), 0)
+        , hash(Botan::HashFunction::create_or_throw(FSIG_DEFAULT_HASH_ALGO))
+        , hash_zeros(hash->output_length(), 0)
     { }
 
     std::string digits;
@@ -32,7 +32,7 @@ struct Fixture
     std::unique_ptr<fsig_test::MemoryWriter> writer;
     std::vector<uint8_t> & result;
     std::unique_ptr<Botan::HashFunction> hash;
-    std::vector<uint8_t> const md5_zero_space;
+    std::vector<uint8_t> const hash_zeros;
 };
 
 BOOST_FIXTURE_TEST_CASE(empty_data_8_1_1_0, Fixture)
@@ -78,7 +78,7 @@ BOOST_FIXTURE_TEST_CASE(digits_10_10_1_0, Fixture)
 
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
-    BOOST_CHECK_EQUAL(hex_str(result), hex_str(md5(digits)));
+    BOOST_CHECK_EQUAL(hex_str(result), hex_str(h(digits)));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_4_4_1_0, Fixture)
@@ -95,7 +95,7 @@ BOOST_FIXTURE_TEST_CASE(digits_4_4_1_0, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5("0123") + md5("4567") + md5("89")));
+                      hex_str(h("0123") + h("4567") + h("89")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_4_3_1_0, Fixture)
@@ -112,7 +112,7 @@ BOOST_FIXTURE_TEST_CASE(digits_4_3_1_0, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5("0123") + md5("4567") + md5("89")));
+                      hex_str(h("0123") + h("4567") + h("89")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_4_2_1_0, Fixture)
@@ -129,7 +129,7 @@ BOOST_FIXTURE_TEST_CASE(digits_4_2_1_0, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5("0123") + md5("4567") + md5("89")));
+                      hex_str(h("0123") + h("4567") + h("89")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_3_4_1_0, Fixture)
@@ -147,7 +147,7 @@ BOOST_FIXTURE_TEST_CASE(digits_3_4_1_0, Fixture)
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
     BOOST_CHECK_EQUAL(
                 hex_str(result),
-                hex_str(md5("012") + md5("345") + md5("678") + md5("9")));
+                hex_str(h("012") + h("345") + h("678") + h("9")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_3_4_2_0, Fixture)
@@ -164,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE(digits_3_4_2_0, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5("012") + md5_zero_space + md5("678")));
+                      hex_str(h("012") + hash_zeros + h("678")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_5_7_2_1, Fixture)
@@ -181,7 +181,7 @@ BOOST_FIXTURE_TEST_CASE(digits_5_7_2_1, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 1));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5_zero_space + md5("56789")));
+                      hex_str(hash_zeros + h("56789")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_2_2_2_0, Fixture)
@@ -198,9 +198,9 @@ BOOST_FIXTURE_TEST_CASE(digits_2_2_2_0, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5("01") + md5_zero_space +
-                              md5("45") + md5_zero_space +
-                              md5("89")));
+                      hex_str(h("01") + hash_zeros +
+                              h("45") + hash_zeros +
+                              h("89")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_2_2_3_1, Fixture)
@@ -217,8 +217,8 @@ BOOST_FIXTURE_TEST_CASE(digits_2_2_3_1, Fixture)
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 1));
     BOOST_CHECK_EQUAL(hex_str(result),
-                      hex_str(md5_zero_space + md5("23") + md5_zero_space +
-                              md5_zero_space + md5("89")));
+                      hex_str(hash_zeros + h("23") + hash_zeros +
+                              hash_zeros + h("89")));
 }
 
 BOOST_FIXTURE_TEST_CASE(digits_2_2_5_5, Fixture)

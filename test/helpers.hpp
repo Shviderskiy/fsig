@@ -23,15 +23,15 @@ std::vector<Type_, Allocator_> operator + (
 
 std::string hex_str(std::vector<uint8_t> const & vector_);
 
-std::vector<uint8_t> md5(void const * data_, size_t size_);
+std::vector<uint8_t> h(void const * data_, size_t size_);
 
 template <size_t Size_>
-std::vector<uint8_t> md5(char const (&string_)[Size_])
+std::vector<uint8_t> h(char const (&string_)[Size_])
 {
-    return md5(string_, Size_ - 1);
+    return h(string_, Size_ - 1);
 }
 
-std::vector<uint8_t> md5(std::string const & string_);
+std::vector<uint8_t> h(std::string const & string_);
 
 } // namespace fsig_test
 
