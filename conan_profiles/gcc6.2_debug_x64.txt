@@ -1,0 +1,9 @@
+[settings]
+arch=x86_64
+arch_build=x86_64
+build_type=Debug
+os=Linux
+os_build=Linux
+compiler=gcc
+compiler.libcxx=libstdc++11
+compiler.version=6.2
