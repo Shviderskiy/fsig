@@ -27,7 +27,7 @@ struct WorkerContext
         , reader(std::move(reader_))
         , writer(std::move(writer_))
         , hash(std::move(hash_))
-        , exception(nullptr)
+        , is_stopped(false)
     { }
 
     WorkerContext(WorkerContext const &) = delete;
@@ -40,14 +40,15 @@ struct WorkerContext
     std::unique_ptr<IReader> reader;
     std::unique_ptr<IWriter> writer;
     std::unique_ptr<Botan::HashFunction const> hash;
-    std::atomic<std::exception_ptr *> exception;
+    std::atomic_bool is_stopped;
 };
 
 void worker_logic(std::shared_ptr<WorkerContext> context_,
                   size_t thread_index_);
 
 void worker(std::shared_ptr<WorkerContext> context_,
-            size_t thread_index_) noexcept;
+            size_t thread_index_,
+            std::exception_ptr & exception_) noexcept;
 
 } // namespace fsig
 

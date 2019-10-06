@@ -31,11 +31,21 @@ int main(int argc_, char * argv_[])
                     Botan::HashFunction::create_or_throw(
                         command_line_args.hash_algo));
 
-        std::vector<std::thread> threads { };
-        for (size_t i = 0; i < command_line_args.threads_count - 1; i++)
-            threads.emplace_back([=] { fsig::worker(context, i); });
+        std::vector<std::exception_ptr> exceptions(
+                    command_line_args.threads_count, nullptr);
 
-        fsig::worker(context, command_line_args.threads_count - 1);
+        std::vector<std::thread> threads { };
+        threads.reserve(command_line_args.threads_count - 1);
+
+        {
+            size_t i = 0;
+            for ( ; i < command_line_args.threads_count - 1; i++)
+                threads.emplace_back([=, &exceptions] {
+                    fsig::worker(std::move(context), i, exceptions[i]);
+                });
+
+            fsig::worker(context, i, exceptions[i]);
+        }
 
         for (std::thread & x : threads) {
 
@@ -43,8 +53,11 @@ int main(int argc_, char * argv_[])
                 x.join();
         }
 
-        if (context->exception.load() != nullptr)
-            std::rethrow_exception(*context->exception.load());
+        for (std::exception_ptr const & x : exceptions) {
+
+            if (x != nullptr)
+                throw x;
+        }
 
         context->writer->flush();
 
