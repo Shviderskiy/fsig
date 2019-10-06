@@ -9,7 +9,7 @@ FileWriter::FileWriter(std::string const & file_path_)
     , _mutex()
     , _file()
 {
-    _file.open(file_path_);
+    _file.open(file_path_, _file.binary);
     if (_file.fail())
         throw std::runtime_error("cannot open '" + file_path_ + "'");
 }
