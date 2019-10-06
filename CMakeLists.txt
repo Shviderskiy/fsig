@@ -58,9 +58,6 @@ if(MINGW OR UNIX)
         # disable RTTI
         -fno-rtti
     )
-    list(APPEND FSIG_LINK_OPTIONS
-        -static # static link with c++lib
-    )
     if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
         list(APPEND FSIG_LINK_OPTIONS
             -s # remove all symbols from executable
@@ -68,8 +65,19 @@ if(MINGW OR UNIX)
     endif()
 endif()
 
+if(UNIX)
+    list(APPEND FSIG_LINK_OPTIONS
+         -static-libgcc
+         -static-libstdc++
+    )
+endif()
+
 if(MINGW)
-    list(APPEND FSIG_LINK_LIBRARIES ws2_32)
+    list(APPEND FSIG_LINK_OPTIONS
+        -static # static link with all mingw libs
+    )
+    # for boost asio
+    # list(APPEND FSIG_LINK_LIBRARIES ws2_32)
 endif()
 
 if(MSVC)
