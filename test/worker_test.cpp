@@ -159,7 +159,7 @@ BOOST_FIXTURE_TEST_CASE(digits_3_4_2_0, Fixture)
                 2, // threads_count_
                 std::move(reader),
                 std::move(writer),
-                std::unique_ptr<Botan::HashFunction>(new Botan::MD5));
+                std::move(hash));
 
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
@@ -176,7 +176,7 @@ BOOST_FIXTURE_TEST_CASE(digits_5_7_2_1, Fixture)
                 2, // threads_count_
                 std::move(reader),
                 std::move(writer),
-                std::unique_ptr<Botan::HashFunction>(new Botan::MD5));
+                std::move(hash));
 
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 1));
@@ -193,7 +193,7 @@ BOOST_FIXTURE_TEST_CASE(digits_2_2_2_0, Fixture)
                 2, // threads_count_
                 std::move(reader),
                 std::move(writer),
-                std::unique_ptr<Botan::HashFunction>(new Botan::MD5));
+                std::move(hash));
 
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
@@ -212,13 +212,29 @@ BOOST_FIXTURE_TEST_CASE(digits_2_2_3_1, Fixture)
                 3, // threads_count_
                 std::move(reader),
                 std::move(writer),
-                std::unique_ptr<Botan::HashFunction>(new Botan::MD5));
+                std::move(hash));
 
     using namespace fsig_test;
     BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 1));
     BOOST_CHECK_EQUAL(hex_str(result),
                       hex_str(md5_zero_space + md5("23") + md5_zero_space +
                               md5_zero_space + md5("89")));
+}
+
+BOOST_FIXTURE_TEST_CASE(digits_2_2_5_5, Fixture)
+{
+    std::shared_ptr<fsig::WorkerContext> context =
+            std::make_shared<fsig::WorkerContext>(
+                2, // block_size_
+                2, // io_block_size_
+                5, // threads_count_
+                std::move(reader),
+                std::move(writer),
+                std::move(hash));
+
+    using namespace fsig_test;
+    BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 5));
+    BOOST_CHECK(result.empty());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
