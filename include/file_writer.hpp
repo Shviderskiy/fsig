@@ -1,7 +1,9 @@
 #ifndef FSIG_FILE_WRITER_HPP
 #define FSIG_FILE_WRITER_HPP
 
-#include <string.h>
+#include <string>
+#include <fstream>
+#include <mutex>
 
 #include "io_interfaces.hpp"
 
@@ -22,6 +24,9 @@ struct FileWriter : public IWriter
 
 private:
 
+    std::string _file_path;
+    std::mutex _mutex;
+    std::ofstream _file;
 };
 
 } // namespace fsig
