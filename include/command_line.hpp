@@ -10,8 +10,8 @@ namespace fsig {
 
 struct CommandLineArgs
 {
-    std::string input;
-    std::string output;
+    std::string input_file;
+    std::string output_file;
     size_t block_size;
     size_t io_block_size;
     size_t threads_count;

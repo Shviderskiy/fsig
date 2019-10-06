@@ -11,6 +11,8 @@ set(FSIG_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/command_line.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/worker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/file_reader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/file_writer.cpp
 )
 
 set(FSIG_INCLUDE_DIRECTORIES

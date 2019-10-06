@@ -118,8 +118,10 @@ CommandLineArgs parse_command_line(int argc_, char const * const argv_[])
     description.add_options()
             ("help,h", "Help")
             ("version,v", "Version")
-            ("input,i", bpo::value<std::string>(&result.input)->required())
-            ("output,o", bpo::value<std::string>(&result.output)->required())
+            ("input-file,i",
+             bpo::value<std::string>(&result.input_file)->required())
+            ("output-file,o",
+             bpo::value<std::string>(&result.output_file)->required())
             ("block-size",
              bpo::value<std::string>()
              ->default_value(size_to_string(result.block_size))
@@ -144,8 +146,8 @@ CommandLineArgs parse_command_line(int argc_, char const * const argv_[])
              ->default_value(result.hash_algo));
 
     bpo::positional_options_description positional;
-    positional.add("input", 1);
-    positional.add("output", 1);
+    positional.add("input-file", 1);
+    positional.add("output-file", 1);
 
     bpo::parsed_options parsed = bpo::command_line_parser(argc_, argv_)
                                  .options(description)

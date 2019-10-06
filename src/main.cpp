@@ -8,6 +8,8 @@
 #include <iostream>
 
 #include "command_line.hpp"
+#include "file_reader.hpp"
+#include "file_writer.hpp"
 #include "worker.hpp"
 
 int main(int argc_, char * argv_[])
@@ -22,8 +24,10 @@ int main(int argc_, char * argv_[])
                     command_line_args.block_size,
                     command_line_args.io_block_size,
                     command_line_args.threads_count,
-                    nullptr, // TODO
-                    nullptr, // TODO
+                    std::unique_ptr<fsig::IReader>(
+                        new fsig::FileReader(command_line_args.input_file)),
+                    std::unique_ptr<fsig::IWriter>(
+                        new fsig::FileWriter(command_line_args.output_file)),
                     Botan::HashFunction::create_or_throw(
                         command_line_args.hash_algo));
 
@@ -41,6 +45,8 @@ int main(int argc_, char * argv_[])
 
         if (context->exception.load() != nullptr)
             std::rethrow_exception(*context->exception.load());
+
+        context->writer->flush();
 
         context->reader->close();
         context->writer->close();
