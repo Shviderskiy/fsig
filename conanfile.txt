@@ -2,5 +2,8 @@
 boost/1.70.0@conan/stable
 botan/2.11.0@bincrafters/stable
 
+[options]
+botan:shared=False
+
 [generators]
 cmake
