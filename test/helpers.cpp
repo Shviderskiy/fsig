@@ -14,7 +14,7 @@ std::string hex_str(std::vector<uint8_t> const & vector_)
     result.reserve(2 * vector_.size());
     for (uint8_t x : vector_) {
 
-        result += alphabet[(x >> 8) & 0xf];
+        result += alphabet[(x >> 4) & 0xf];
         result += alphabet[x & 0xf];
     }
     return result;
