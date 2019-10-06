@@ -1,0 +1,65 @@
+#include <stddef.h>
+
+#include <memory>
+#include <string>
+#include <vector>
+#include <thread>
+#include <exception>
+#include <iostream>
+
+#include "command_line.hpp"
+#include "worker.hpp"
+
+int main(int argc_, char * argv_[])
+{
+    try {
+
+        fsig::CommandLineArgs command_line_args =
+                fsig::parse_command_line(argc_, argv_);
+
+        std::shared_ptr<fsig::WorkerContext> context =
+                std::make_shared<fsig::WorkerContext>(
+                    command_line_args.block_size,
+                    command_line_args.io_block_size,
+                    command_line_args.threads_count,
+                    nullptr, // TODO
+                    nullptr, // TODO
+                    Botan::HashFunction::create_or_throw(
+                        command_line_args.hash_algo));
+
+        std::vector<std::thread> threads { };
+        for (size_t i = 0; i < command_line_args.threads_count - 1; i++)
+            threads.emplace_back([=] { fsig::worker(context, i); });
+
+        fsig::worker(context, command_line_args.threads_count - 1);
+
+        for (std::thread & x : threads) {
+
+            if (x.joinable())
+                x.join();
+        }
+
+        if (context->exception.load() != nullptr)
+            std::rethrow_exception(*context->exception.load());
+
+        context->reader->close();
+        context->writer->close();
+
+        return 0;
+    }
+    catch (std::string const & info) {
+
+        std::cout << info;
+        return 0;
+    }
+    catch (std::exception const & error) {
+
+        std::cerr << error.what() << std::endl;
+        return -1;
+    }
+    catch (...) {
+
+        std::cerr << "Unknown exception" << std::endl;
+        return -1;
+    }
+}
