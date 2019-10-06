@@ -56,7 +56,7 @@ int main(int argc_, char * argv_[])
         for (std::exception_ptr const & x : exceptions) {
 
             if (x != nullptr)
-                throw x;
+                std::rethrow_exception(x);
         }
 
         context->writer->flush();
