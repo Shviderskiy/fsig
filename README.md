@@ -2,6 +2,20 @@
 
 TODO: description
 
+## Command line syntax
+```
+Usage: fsig input output [options]
+options:
+  -h [ --help ]                Help
+  -v [ --version ]             Version
+  -i [ --input ] arg
+  -o [ --output ] arg
+  --block-size arg (=1MB)
+  --io-block-size arg (=128KB)
+  --threads-count arg (=4)
+  --hash-algo arg (=MD5)
+```
+
 ## Clone repository and update submodules
 ```bash
 git clone https://github.com/Shviderskiy/fsig.git
@@ -91,17 +105,3 @@ cd build
 
   cmake --build . --config Release
   ```
-
-## Command line syntax
-```
-Usage: fsig input output [options]
-options:
-  -h [ --help ]                Help
-  -v [ --version ]             Version
-  -i [ --input ] arg
-  -o [ --output ] arg
-  --block-size arg (=1MB)
-  --io-block-size arg (=128KB)
-  --threads-count arg (=4)
-  --hash-algo arg (=MD5)
-```
