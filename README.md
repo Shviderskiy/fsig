@@ -8,11 +8,11 @@ Usage: fsig input output [options]
 options:
   -h [ --help ]                Help
   -v [ --version ]             Version
-  -i [ --input ] arg
-  -o [ --output ] arg
+  -i [ --input-file ] arg
+  -o [ --output-file ] arg
   --block-size arg (=1MB)
   --io-block-size arg (=128KB)
-  --threads-count arg (=4)
+  --threads-count arg (=UNSPECIFIED)
   --hash-algo arg (=MD5)
 ```
 
