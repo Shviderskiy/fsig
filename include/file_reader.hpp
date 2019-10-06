@@ -1,7 +1,9 @@
 #ifndef FSIG_FILE_READER_HPP
 #define FSIG_FILE_READER_HPP
 
-#include <string.h>
+#include <string>
+#include <fstream>
+#include <mutex>
 
 #include "io_interfaces.hpp"
 
@@ -21,6 +23,9 @@ struct FileReader : public IReader
 
 private:
 
+    std::string _file_path;
+    std::mutex _mutex;
+    std::ifstream _file;
 };
 
 } // namespace fsig
