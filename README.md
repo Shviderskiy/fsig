@@ -16,7 +16,7 @@ options:
   --hash-algo arg (=MD5)
 ```
 
-## Clone repository and update submodules
+## Clone repository
 ```bash
 git clone https://github.com/Shviderskiy/fsig.git
 cd fsig
