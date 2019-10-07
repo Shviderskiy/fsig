@@ -38,17 +38,24 @@ cd build
 
 ## Install dependencies, configure and build project
 
-### On Windows with MSVC (TODO: finish it)
+### On Windows with MSVC
 
-- Install conan dependencies:
-  - Debug:
-    ```bash
-    conan install .. -s arch=x86 -s arch_build=x86 -s build_type=Debug -s compiler.runtime="MTd" --build missing
-    ```
-  - Release:
-    ```bash
-    conan install .. -s arch=x86 -s arch_build=x86 -s build_type=Release -s compiler.runtime="MT" --build missing
-    ```
+- Debug x64:
+  ```bash
+  conan install .. --profile ../conan_profiles/msvc15_debug_x64.txt --build missing
+
+  cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_GENERATOR_PLATFORM=x64
+
+  cmake --build . --config Debug
+  ```
+- Release x64:
+  ```bash
+  conan install .. --profile ../conan_profiles/msvc15_release_x64.txt --build missing
+
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64
+
+  cmake --build . --config Release
+  ```
 
 ### On Linux with GCC
 
