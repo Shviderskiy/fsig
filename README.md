@@ -25,7 +25,7 @@ cd fsig
 ## Install Conan
 https://conan.io/downloads.html
 
-## Add Conan remove
+## Add Conan remote
 ```bash
 conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 ```
