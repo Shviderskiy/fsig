@@ -8,9 +8,9 @@ namespace fsig {
 
 struct Buffer
 {
-    Buffer(IReader & reader_, size_t size_)
+    Buffer(IReader & reader_, size_t max_size_)
         : _reader(reader_)
-        , _buffer(size_)
+        , _buffer(max_size_)
         , _real_offset(0)
         , _data_offset(0)
         , _bytes_read(0)
