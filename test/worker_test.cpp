@@ -203,6 +203,25 @@ BOOST_FIXTURE_TEST_CASE(digits_2_2_2_0, Fixture)
                               h("89")));
 }
 
+BOOST_FIXTURE_TEST_CASE(digits_2_5_2_0, Fixture)
+{
+    std::shared_ptr<fsig::WorkerContext> context =
+            std::make_shared<fsig::WorkerContext>(
+                2, // block_size_
+                5, // io_block_size_
+                2, // threads_count_
+                std::move(reader),
+                std::move(writer),
+                std::move(hash));
+
+    using namespace fsig_test;
+    BOOST_CHECK_NO_THROW(fsig::worker_logic(context, 0));
+    BOOST_CHECK_EQUAL(hex_str(result),
+                      hex_str(h("01") + hash_zeros +
+                              h("45") + hash_zeros +
+                              h("89")));
+}
+
 BOOST_FIXTURE_TEST_CASE(digits_2_2_3_1, Fixture)
 {
     std::shared_ptr<fsig::WorkerContext> context =
