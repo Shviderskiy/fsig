@@ -14,6 +14,12 @@ FileWriter::FileWriter(std::string const & file_path_)
         throw std::runtime_error("cannot open '" + file_path_ + "'");
 }
 
+FileWriter::~FileWriter() noexcept
+{
+    try { close(); }
+    catch (...) { }
+}
+
 void FileWriter::write(uint64_t offset_,
                        boost::asio::const_buffer const & buffer_)
 {
@@ -33,11 +39,14 @@ void FileWriter::write(uint64_t offset_,
 
 void FileWriter::flush()
 {
+    std::lock_guard<std::mutex> _(_mutex);
     _file.flush();
 }
 
 void FileWriter::close()
 {
+    flush();
+    std::lock_guard<std::mutex> _(_mutex);
     _file.close();
 }
 
