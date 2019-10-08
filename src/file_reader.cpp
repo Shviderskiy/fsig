@@ -36,7 +36,8 @@ size_t FileReader::read(uint64_t offset_,
 
     _file.seekg(std::ios::off_type(offset_), _file.beg);
 
-    size_t bytes_to_read = std::min(buffer_.size(), _file_size - offset_);
+    size_t bytes_to_read =
+            std::min(buffer_.size(), size_t(_file_size - offset_));
     _file.read(static_cast<char *>(buffer_.data()),
                std::streamsize(bytes_to_read));
     if (_file.fail())
