@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include <limits>
+#include <algorithm>
 
 namespace fsig_test {
 
@@ -18,7 +18,7 @@ void MemoryWriter::write(uint64_t offset_,
 
     size_t offset = size_t(offset_);
 
-    content.resize(offset + buffer_.size(), 0);
+    content.resize(std::max(content.size(), offset + buffer_.size()), 0);
     memcpy(content.data() + offset, buffer_.data(), buffer_.size());
 }
 
