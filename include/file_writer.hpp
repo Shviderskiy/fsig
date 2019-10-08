@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <mutex>
+#include <vector>
 
 #include "io_interfaces.hpp"
 
@@ -27,6 +28,7 @@ private:
     std::string _file_path;
     std::mutex _mutex;
     std::ofstream _file;
+    std::vector<char> _buffer;
 };
 
 } // namespace fsig
