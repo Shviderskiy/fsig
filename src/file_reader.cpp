@@ -23,6 +23,12 @@ FileReader::FileReader(std::string const & file_path_)
     _file_size = boost::filesystem::file_size(file_path_);
 }
 
+FileReader::~FileReader() noexcept
+{
+    try { close(); }
+    catch (...) { }
+}
+
 size_t FileReader::read(uint64_t offset_,
                         boost::asio::mutable_buffer const & buffer_)
 {

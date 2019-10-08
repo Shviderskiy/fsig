@@ -14,7 +14,7 @@ struct FileReader : public IReader
     FileReader(std::string const & file_path_);
 
     FileReader(FileReader const &) = delete;
-    virtual ~FileReader() noexcept override = default;
+    virtual ~FileReader() noexcept override;
     FileReader & operator = (FileReader const &) = delete;
 
     virtual size_t read(uint64_t offset_,

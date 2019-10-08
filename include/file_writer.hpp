@@ -14,7 +14,7 @@ struct FileWriter : public IWriter
     FileWriter(std::string const & file_path_);
 
     FileWriter(FileWriter const &) = delete;
-    virtual ~FileWriter() noexcept override = default;
+    virtual ~FileWriter() noexcept override;
     FileWriter & operator = (FileWriter const &) = delete;
 
     virtual void write(uint64_t offset_,
