@@ -49,6 +49,7 @@ size_t FileReader::read(uint64_t offset_,
 
 void FileReader::close()
 {
+    std::lock_guard<std::mutex> _(_mutex);
     _file.close();
 }
 
