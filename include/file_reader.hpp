@@ -1,11 +1,16 @@
 #ifndef FSIG_FILE_READER_HPP
 #define FSIG_FILE_READER_HPP
 
+#include <stddef.h>
+#include <stdint.h>
+
 #include <string>
 #include <fstream>
 #include <mutex>
-#include <atomic>
-#include <condition_variable>
+#include <queue>
+#include <future>
+
+#include <boost/asio/buffer.hpp>
 
 #include "io_interfaces.hpp"
 
@@ -13,7 +18,22 @@ namespace fsig {
 
 struct FileReader : public IReader
 {
-    FileReader(std::string const & file_path_, size_t io_block_size_);
+    struct ReadRequest
+    {
+        ReadRequest(size_t offset_,
+                    boost::asio::mutable_buffer const & buffer_,
+                    std::promise<size_t> bytes_read_) noexcept
+            : offset(offset_)
+            , buffer(buffer_)
+            , bytes_read(std::move(bytes_read_))
+        { }
+
+        size_t offset;
+        boost::asio::mutable_buffer buffer;
+        std::promise<size_t> bytes_read;
+    };
+
+    FileReader(std::string const & file_path_);
 
     FileReader(FileReader const &) = delete;
     virtual ~FileReader() noexcept override;
@@ -25,15 +45,16 @@ struct FileReader : public IReader
 
 private:
 
+    ReadRequest _get_request();
+    void _execute_request();
+
     std::string _file_path;
-    size_t const _io_block_size;
+    uint64_t _file_size;
     std::mutex _file_mutex;
     std::ifstream _file;
-    uint64_t _file_size;
-    std::atomic<uint64_t> _expected_offset;
-    std::atomic_bool _is_stopped;
-    std::mutex _cv_mutex;
-    std::condition_variable _cv;
+
+    std::mutex _requests_mutex;
+    std::priority_queue<ReadRequest> _requests;
 };
 
 } // namespace fsig

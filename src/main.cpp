@@ -25,8 +25,7 @@ int main(int argc_, char * argv_[])
                     command_line_args.io_block_size,
                     command_line_args.threads_count,
                     std::unique_ptr<fsig::IReader>(
-                        new fsig::FileReader(command_line_args.input_file,
-                                             command_line_args.io_block_size)),
+                        new fsig::FileReader(command_line_args.input_file)),
                     std::unique_ptr<fsig::IWriter>(
                         new fsig::FileWriter(command_line_args.output_file)),
                     Botan::HashFunction::create_or_throw(
