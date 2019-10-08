@@ -13,9 +13,6 @@ MemoryWriter::MemoryWriter() noexcept
 void MemoryWriter::write(uint64_t offset_,
                          boost::asio::const_buffer const & buffer_)
 {
-    if (offset_ > uint64_t(std::numeric_limits<size_t>::max()))
-        throw std::invalid_argument("offest_ too big");
-
     if (buffer_.data() == nullptr)
         throw std::invalid_argument("buffer_ is NULL");
 
