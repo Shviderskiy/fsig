@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <boost/asio/buffer.hpp>
+
 #include "io_interfaces.hpp"
 
 namespace fsig_test {
