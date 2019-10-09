@@ -64,18 +64,12 @@ void FileWriter::write(uint64_t offset_,
     }
 }
 
-void FileWriter::flush()
+void FileWriter::close()
 {
     std::lock_guard<std::mutex> _(_mutex);
     _file.write(_to_write.data(), std::streamsize(_to_write.size()));
     _to_write.clear();
     _file.flush();
-}
-
-void FileWriter::close()
-{
-    flush();
-    std::lock_guard<std::mutex> _(_mutex);
     _file.close();
 }
 

@@ -27,7 +27,8 @@ int main(int argc_, char * argv_[])
                     std::unique_ptr<fsig::IReader>(
                         new fsig::FileReader(command_line_args.input_file)),
                     std::unique_ptr<fsig::IWriter>(
-                        new fsig::FileWriter(command_line_args.output_file)),
+                        new fsig::FileWriter(command_line_args.output_file,
+                                             command_line_args.io_block_size)),
                     Botan::HashFunction::create_or_throw(
                         command_line_args.hash_algo));
 
@@ -58,8 +59,6 @@ int main(int argc_, char * argv_[])
             if (x != nullptr)
                 std::rethrow_exception(x);
         }
-
-        context->writer->flush();
 
         context->reader->close();
         context->writer->close();

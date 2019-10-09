@@ -21,7 +21,6 @@ struct IWriter
     virtual ~IWriter() noexcept = default;
     virtual void write(uint64_t offset_,
                        boost::asio::const_buffer const & buffer_) = 0;
-    virtual void flush() = 0;
     virtual void close() = 0;
 };
 

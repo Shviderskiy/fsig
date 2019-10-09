@@ -22,9 +22,6 @@ void MemoryWriter::write(uint64_t offset_,
     memcpy(content.data() + offset, buffer_.data(), buffer_.size());
 }
 
-void MemoryWriter::flush()
-{ }
-
 void MemoryWriter::close()
 {
     content.clear();

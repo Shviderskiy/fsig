@@ -19,7 +19,6 @@ struct MemoryWriter : public fsig::IWriter
 
     virtual void write(uint64_t offset_,
                        boost::asio::const_buffer const & buffer_) override;
-    virtual void flush() override;
     virtual void close() override;
 
     std::vector<uint8_t> content;
