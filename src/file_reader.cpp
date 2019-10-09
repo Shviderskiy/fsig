@@ -60,6 +60,8 @@ void FileReader::close()
 {
     std::lock_guard<std::mutex> _(_file_mutex);
     _file.close();
+    if (_file.fail())
+        throw std::runtime_error("cannot close '" + _file_path + "'");
 }
 
 FileReader::ReadRequest FileReader::_get_request()

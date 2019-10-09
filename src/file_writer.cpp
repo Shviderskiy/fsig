@@ -68,9 +68,15 @@ void FileWriter::close()
 {
     std::lock_guard<std::mutex> _(_mutex);
     _file.write(_to_write.data(), std::streamsize(_to_write.size()));
+    if (_file.fail())
+        throw std::runtime_error(
+                "cannot write '" + _file_path + "' "
+                "at " + std::to_string(_offset) + " offset");
     _to_write.clear();
     _file.flush();
     _file.close();
+    if (_file.fail())
+        throw std::runtime_error("cannot close '" + _file_path + "'");
 }
 
 std::vector<char> FileWriter::_create_buffer(void const * data_, size_t size_)
